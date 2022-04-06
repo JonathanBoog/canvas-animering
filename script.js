@@ -22,8 +22,8 @@ let dxYellow = 5;
 let dyYellow = 3;
 
 // Sidlängd för respektive kvadrat
-const sizeRed = 30;
-const sizeYellow = 30;
+const sizeRed = 100;
+const sizeYellow = 100;
 
 // Variabler som håller reda på respektive kvadrats mittkoordinat
 let xCenterRed = (xPosRed + xPosRed + sizeRed) / 2;
@@ -40,6 +40,12 @@ const updateFrequency = 10; // millisekunder per steg
 let redBounces = 0;
 let yellowBounces = 0;
 
+let rectX = 200
+let rectY = 200
+let rectHeight = canvas.height-2*rectY;
+let rectWidth = canvas.width-2*rectX
+
+let rectTouches = 0;
 // Reagerar på tangenttryckningar
 // Varje tangent har sin keycode, se https://keycode.info
 document.onkeydown = function (e) {
@@ -47,15 +53,19 @@ document.onkeydown = function (e) {
   switch (key) {
     case "ä":
       console.log("Röd kvadrat ska byta riktning i x-led");
+      dxRed = -dxRed;
       break;
     case "ö":
       console.log("Röd kvadrat ska byta riktning i y-led");
+      dyRed = -dyRed;
       break;
     case "a":
       console.log("Gul kvadrat ska byta riktning i x-led");
+      dxYellow = -dxYellow;
       break;
     case "s":
       console.log("Gul kvadrat ska byta riktning i y-led");
+      dyYellow = -dyYellow;
       break;
     case " ": // Mellanslag
       console.log(`Runtime: ${runtime} sekunder.`);
@@ -67,6 +77,7 @@ document.onkeydown = function (e) {
 
 let myTimer = setInterval(drawRects, updateFrequency);
 
+
 // Ritar upp kvadraterna
 function drawRects() {
   // Håller koll på tiden som programmet varit igång
@@ -76,13 +87,22 @@ function drawRects() {
   if (redBounces >= 100 || yellowBounces >= 100) {
     clearInterval(myTimer);
     alert("Nog med studsar!\nNu vet du hur en animering avslutas.");
-  }
 
+  }
+  if (rectTouches >= 10){
+    clearInterval(myTimer);
+    alert("Nog med studsar!\nDu har gått genom rektangeln för mycket");
+  }
   // Rensar gammalt visuellt innehåll
   c.clearRect(0, 0, canvas.width, canvas.height);
-
+ 
+  c.beginPath()
+  c.rect(rectX,rectY,rectWidth,rectHeight)
+  c.stroke()
   // Kolla om riktningsändring ska göras pga kant
   checkBounce();
+
+  checkTouch();
 
   // Beräkna nytt läge
   xPosRed += dxRed;
@@ -107,6 +127,30 @@ function drawRects() {
 }
 
 // Då respektive kvadrat kommer till en ytterkant ska de studsa
+function checkTouch() {
+  if (xPosRed < rectX || xPosRed > (canvas.width-rectX - sizeRed)){
+    touchR = true;
+    rectTouches+=1;
+  } else {touchR = false;}
+  if (xPosYellow == rectX || xPosYellow == canvas.width -rectX - sizeYellow) {
+    rectTouches+=1;
+    touchY = true;
+    
+  }else {touchY = false;}
+  if (yPosRed == rectY || yPosRed == canvas.height - rectY - sizeRed) {
+    if (touchR == false){
+      rectTouches+=1;
+      touchR = true;
+    }
+    
+  } else {touchR = false;}
+
+  if (yPosYellow == rectY || yPosYellow == canvas.height - rectY - sizeYellow) {
+    rectTouches+=1;
+    touchY = true;
+  } else {touchY = false;}
+   
+} 
 function checkBounce() {
   if (xPosRed < 0 || xPosRed > canvas.width - sizeRed) {
     dxRed = -dxRed;
