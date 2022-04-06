@@ -46,9 +46,13 @@ let rectHeight = canvas.height-2*rectY;
 let rectWidth = canvas.width-2*rectX
 
 let rectTouches = 0;
-
 let touchR = false;
 let touchY = false;
+
+let arrayRed = [];
+let arrayYellow = [];
+
+let snakeLength = 100;
 // Reagerar på tangenttryckningar
 // Varje tangent har sin keycode, se https://keycode.info
 document.onkeydown = function (e) {
@@ -92,13 +96,12 @@ function drawRects() {
     alert("Nog med studsar!\nNu vet du hur en animering avslutas.");
 
   }
-  console.log(rectTouches)
   if (rectTouches >= 10){
     clearInterval(myTimer);
     alert("Nog med studsar!\nDu har gått genom rektangeln för mycket");
   }
   // Rensar gammalt visuellt innehåll
-  c.clearRect(0, 0, canvas.width, canvas.height);
+
  
   c.beginPath()
   c.rect(rectX,rectY,rectWidth,rectHeight)
@@ -106,6 +109,7 @@ function drawRects() {
   // Kolla om riktningsändring ska göras pga kant
   checkBounce();
 
+  //Kolla antalet gångar som kvadraterna har gått genom den mindre
   checkTouch();
 
   // Beräkna nytt läge
@@ -117,11 +121,24 @@ function drawRects() {
   // Den röda kvadraten ritas i sitt nya läge
   c.fillStyle = "red";
   c.fillRect(xPosRed, yPosRed, sizeRed, sizeRed);
+  arrayRed.push(xPosRed);
+  arrayRed.push(yPosRed);
+  arrayRed.push(sizeRed);
+  arrayRed.push(sizeRed);
 
   // Den gula kvadraten ritas i sitt nya läge
   c.fillStyle = "yellow";
   c.fillRect(xPosYellow, yPosYellow, sizeYellow, sizeYellow);
-
+  arrayYellow.push(xPosYellow)
+  arrayYellow.push(yPosYellow) 
+  arrayYellow.push(sizeYellow)
+  arrayYellow.push(sizeYellow)
+  
+  if ((arrayRed.length && arrayYellow.length) == snakeLength){
+  c.clearRect(arrayRed.splice(0,1),arrayRed.splice(0,1),arrayRed.splice(0,1),arrayRed.splice(0,1));
+  c.clearRect(arrayYellow.splice(0,1),arrayYellow.splice(0,1),arrayYellow.splice(0,1),arrayYellow.splice(0,1));
+  }
+  
   // Variablerna för mittenkoordinaten för respektive
   // kvadrat uppdateras
   xCenterRed = (xPosRed + xPosRed + sizeRed) / 2;
