@@ -22,8 +22,8 @@ let dxYellow = 5;
 let dyYellow = 3;
 
 // Sidlängd för respektive kvadrat
-const sizeRed = 100;
-const sizeYellow = 100;
+const sizeRed = 30;
+const sizeYellow = 30;
 
 // Variabler som håller reda på respektive kvadrats mittkoordinat
 let xCenterRed = (xPosRed + xPosRed + sizeRed) / 2;
@@ -46,6 +46,9 @@ let rectHeight = canvas.height-2*rectY;
 let rectWidth = canvas.width-2*rectX
 
 let rectTouches = 0;
+
+let touchR = false;
+let touchY = false;
 // Reagerar på tangenttryckningar
 // Varje tangent har sin keycode, se https://keycode.info
 document.onkeydown = function (e) {
@@ -128,16 +131,8 @@ function drawRects() {
 
 // Då respektive kvadrat kommer till en ytterkant ska de studsa
 function checkTouch() {
-  if (xPosRed < rectX || xPosRed > (canvas.width-rectX - sizeRed)){
-    touchR = true;
-    rectTouches+=1;
-  } else {touchR = false;}
-  if (xPosYellow == rectX || xPosYellow == canvas.width -rectX - sizeYellow) {
-    rectTouches+=1;
-    touchY = true;
-    
-  }else {touchY = false;}
-  if (yPosRed == rectY || yPosRed == canvas.height - rectY - sizeRed) {
+  console.log(touchR,touchY)
+  if (xPosRed < rectX || xPosRed > (canvas.width - rectX - sizeRed)){
     if (touchR == false){
       rectTouches+=1;
       touchR = true;
@@ -145,10 +140,30 @@ function checkTouch() {
     
   } else {touchR = false;}
 
-  if (yPosYellow == rectY || yPosYellow == canvas.height - rectY - sizeYellow) {
-    rectTouches+=1;
-    touchY = true;
+  if (xPosYellow < rectX || xPosYellow > (canvas.width - rectX - sizeYellow)) {
+    if (touchY == false){
+      rectTouches+=1;
+      touchY = true;
+    }
+    
   } else {touchY = false;}
+
+  if (yPosRed < rectY || yPosRed > (canvas.height - rectY - sizeRed)) {
+    if (touchR == false){
+      rectTouches+=1;
+      touchR = true;
+    }
+    
+  } else {touchR = false;}
+
+  if (yPosYellow < rectY || yPosYellow > (canvas.height - rectY - sizeYellow)) {
+    if (touchY == false){
+      rectTouches+=1;
+      touchY = true;
+    }
+    
+  } else {touchY = false;}
+
    
 } 
 function checkBounce() {
