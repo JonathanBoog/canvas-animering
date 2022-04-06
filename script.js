@@ -92,6 +92,7 @@ function drawRects() {
     alert("Nog med studsar!\nNu vet du hur en animering avslutas.");
 
   }
+  console.log(rectTouches)
   if (rectTouches >= 10){
     clearInterval(myTimer);
     alert("Nog med studsar!\nDu har gått genom rektangeln för mycket");
@@ -131,14 +132,21 @@ function drawRects() {
 
 // Då respektive kvadrat kommer till en ytterkant ska de studsa
 function checkTouch() {
-  console.log(touchR,touchY)
+  
   if (xPosRed < rectX || xPosRed > (canvas.width - rectX - sizeRed)){
     if (touchR == false){
       rectTouches+=1;
       touchR = true;
     }
     
+  } else if (yPosRed < rectY || yPosRed > (canvas.height - rectY - sizeRed)) {
+    if (touchR == false){
+      rectTouches+=1;
+      touchR = true;
+    }
+    
   } else {touchR = false;}
+
 
   if (xPosYellow < rectX || xPosYellow > (canvas.width - rectX - sizeYellow)) {
     if (touchY == false){
@@ -146,17 +154,7 @@ function checkTouch() {
       touchY = true;
     }
     
-  } else {touchY = false;}
-
-  if (yPosRed < rectY || yPosRed > (canvas.height - rectY - sizeRed)) {
-    if (touchR == false){
-      rectTouches+=1;
-      touchR = true;
-    }
-    
-  } else {touchR = false;}
-
-  if (yPosYellow < rectY || yPosYellow > (canvas.height - rectY - sizeYellow)) {
+  } else if (yPosYellow < rectY || yPosYellow > (canvas.height - rectY - sizeYellow)) {
     if (touchY == false){
       rectTouches+=1;
       touchY = true;
