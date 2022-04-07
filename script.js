@@ -53,27 +53,58 @@ let arrayRed = [];
 let arrayYellow = [];
 
 let snakeLength = 100;
+
+let color = ["red", "orange", "yellow", "green", "ligthBlue", "blue", "purple"]
+let boo = 0
 // Reagerar på tangenttryckningar
 // Varje tangent har sin keycode, se https://keycode.info
 document.onkeydown = function (e) {
   const key = e.key;
   switch (key) {
-    case "ä":
-      console.log("Röd kvadrat ska byta riktning i x-led");
-      dxRed = -dxRed;
+    case "ArrowUp":
+      console.log("upp");
+      dxRed = 0;
+      dyRed = -4;
       break;
-    case "ö":
-      console.log("Röd kvadrat ska byta riktning i y-led");
-      dyRed = -dyRed;
+    case "ArrowDown":
+      console.log("ner");
+      dxRed = 0;
+      dyRed = 4;
       break;
+    
+    case "ArrowLeft":
+      console.log("vänster");
+      dxRed = -4;
+      dyRed = 0;
+      break;
+      
+    case "ArrowRight":
+      console.log("höger");
+      dxRed = 4;
+      dyRed = 0;  
+      break;    
+
     case "a":
-      console.log("Gul kvadrat ska byta riktning i x-led");
-      dxYellow = -dxYellow;
+      console.log("vänster");
+      dxYellow = -4;
+      dyYellow = 0;
       break;
     case "s":
-      console.log("Gul kvadrat ska byta riktning i y-led");
-      dyYellow = -dyYellow;
+      console.log("ner");
+      dxYellow = 0;
+      dyYellow = 4;
       break;
+
+    case "w":
+      console.log("upp");
+      dxYellow = 0;
+      dyYellow = -4;
+      break;
+    case "d":
+      console.log("höger");
+      dxYellow = 4;
+      dyYellow = 0;
+    break;
     case " ": // Mellanslag
       console.log(`Runtime: ${runtime} sekunder.`);
       break;
@@ -93,12 +124,12 @@ function drawRects() {
 
   if (redBounces >= 100 || yellowBounces >= 100) {
     clearInterval(myTimer);
-    alert("Nog med studsar!\nNu vet du hur en animering avslutas.");
+    alert("Stop it! \nGet some help");
 
   }
   if (rectTouches >= 10){
     clearInterval(myTimer);
-    alert("Nog med studsar!\nDu har gått genom rektangeln för mycket");
+    alert("sus \ndu nudda rektangeln för mycket...");
   }
   // Rensar gammalt visuellt innehåll
 
@@ -127,8 +158,12 @@ function drawRects() {
   arrayRed.push(sizeRed);
 
   // Den gula kvadraten ritas i sitt nya läge
-  c.fillStyle = "yellow";
-  c.fillRect(xPosYellow, yPosYellow, sizeYellow, sizeYellow);
+  
+  
+  if (boo == color.length){boo = 0;}
+  c.fillStyle = color[boo];
+  boo++;
+   c.fillRect(xPosYellow, yPosYellow, sizeYellow, sizeYellow);
   arrayYellow.push(xPosYellow)
   arrayYellow.push(yPosYellow) 
   arrayYellow.push(sizeYellow)
