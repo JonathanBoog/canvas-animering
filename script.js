@@ -20,6 +20,7 @@ let dxRed = 3;
 let dyRed = 4;
 let dxYellow = 5;
 let dyYellow = 3;
+let moveSpeed = Math.round(Math.random()*15+5)
 
 // Sidlängd för respektive kvadrat
 const sizeRed = 30;
@@ -40,8 +41,8 @@ const updateFrequency = 10; // millisekunder per steg
 let redBounces = 0;
 let yellowBounces = 0;
 
-let rectX = 200
-let rectY = 200
+let rectX = Math.round(Math.random()*300+50)
+let rectY = Math.round(Math.random()*300+50)
 let rectHeight = canvas.height-2*rectY;
 let rectWidth = canvas.width-2*rectX
 
@@ -54,8 +55,12 @@ let arrayYellow = [];
 
 let snakeLength = 100;
 
-let color = ["red", "orange", "yellow", "green", "ligthBlue", "blue", "purple"]
-let boo = 0
+let rectLength = Math.round(Math.random()*100 +2)
+
+let color = ["red", "orange", "yellow", "green", "ligthBlue", "blue", "purple"];
+let boo = 0;
+let colorR = ["GreenYellow ","Chartreuse","LawnGreen ", "Lime", "LimeGreen", "PaleGreen","LightGreen ","MediumSpringGreen ","SpringGreen ", "MediumSeaGreen ", "SeaGreen ", "ForestGreen","Green","DarkGreen","YellowGreen", "OliveDrab","DarkOliveGreen", "MediumAquaMarine ", "DarkSeaGreen","LightSeaGreen","DarkCyan","Teal"]
+let bru = 0;
 // Reagerar på tangenttryckningar
 // Varje tangent har sin keycode, se https://keycode.info
 document.onkeydown = function (e) {
@@ -64,47 +69,54 @@ document.onkeydown = function (e) {
     case "ArrowUp":
       console.log("upp");
       dxRed = 0;
-      dyRed = -4;
+      dyRed = -moveSpeed;
       break;
     case "ArrowDown":
       console.log("ner");
       dxRed = 0;
-      dyRed = 4;
+      dyRed = moveSpeed;
       break;
     
     case "ArrowLeft":
       console.log("vänster");
-      dxRed = -4;
+      dxRed = -moveSpeed;
       dyRed = 0;
       break;
       
     case "ArrowRight":
       console.log("höger");
-      dxRed = 4;
+      dxRed = moveSpeed;
       dyRed = 0;  
       break;    
 
     case "a":
       console.log("vänster");
-      dxYellow = -4;
+      dxYellow = -moveSpeed;
       dyYellow = 0;
       break;
     case "s":
       console.log("ner");
       dxYellow = 0;
-      dyYellow = 4;
+      dyYellow = moveSpeed;
       break;
 
     case "w":
       console.log("upp");
       dxYellow = 0;
-      dyYellow = -4;
+      dyYellow = -moveSpeed;
       break;
     case "d":
       console.log("höger");
-      dxYellow = 4;
+      dxYellow = moveSpeed;
       dyYellow = 0;
-    break;
+      break;
+    case "r":
+      console.log("reset");
+      dxRed = 3; 
+      dyRed = 4;
+      dxYellow = 5;
+      dyYellow = 3;
+      break;
     case " ": // Mellanslag
       console.log(`Runtime: ${runtime} sekunder.`);
       break;
@@ -127,13 +139,12 @@ function drawRects() {
     alert("Stop it! \nGet some help");
 
   }
-  if (rectTouches >= 10){
+  if (rectTouches >= rectLength){
     clearInterval(myTimer);
     alert("sus \ndu nudda rektangeln för mycket...");
   }
   // Rensar gammalt visuellt innehåll
 
- 
   c.beginPath()
   c.rect(rectX,rectY,rectWidth,rectHeight)
   c.stroke()
@@ -142,6 +153,8 @@ function drawRects() {
 
   //Kolla antalet gångar som kvadraterna har gått genom den mindre
   checkTouch();
+  checkSUS();
+  console.log(rectTouches)
 
   // Beräkna nytt läge
   xPosRed += dxRed;
@@ -149,8 +162,10 @@ function drawRects() {
   xPosYellow += dxYellow;
   yPosYellow += dyYellow;
 
-  // Den röda kvadraten ritas i sitt nya läge
-  c.fillStyle = "red";
+
+  let hexCode = '#' + bru.toString(16).padStart(1, "0"); 
+  bru++;
+  c.fillStyle = hexCode
   c.fillRect(xPosRed, yPosRed, sizeRed, sizeRed);
   arrayRed.push(xPosRed);
   arrayRed.push(yPosRed);
@@ -160,8 +175,8 @@ function drawRects() {
   // Den gula kvadraten ritas i sitt nya läge
   
   
-  if (boo == color.length){boo = 0;}
-  c.fillStyle = color[boo];
+  if (boo == colorR.length){boo = 0;}
+  c.fillStyle = colorR[boo];
   boo++;
    c.fillRect(xPosYellow, yPosYellow, sizeYellow, sizeYellow);
   arrayYellow.push(xPosYellow)
@@ -182,6 +197,9 @@ function drawRects() {
   yCenterYellow = (yPosYellow + yPosYellow + sizeYellow) / 2;
 }
 
+function checkSUS(){
+
+}
 // Då respektive kvadrat kommer till en ytterkant ska de studsa
 function checkTouch() {
   
@@ -192,6 +210,7 @@ function checkTouch() {
     }
     
   } else if (yPosRed < rectY || yPosRed > (canvas.height - rectY - sizeRed)) {
+    
     if (touchR == false){
       rectTouches+=1;
       touchR = true;
